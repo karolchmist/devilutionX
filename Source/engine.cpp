@@ -646,6 +646,32 @@ void engine_draw_pixel(int sx, int sy)
 		*dst = gbPixelCol;
 }
 
+void DrawSolidRectangle(int x0, int dx, int y0, int dy, int color) {
+	char* WorkingSurface = (char*)gpBuffer;
+	for (int x = x0; x < x0 + dx; x++) {
+		for (int y = y0; y < y0 + dy; y++) {
+			WorkingSurface[y*768+x] = color;
+		}
+	}
+}
+
+int CalculateTextWidth(const char* s)
+{
+	int l = 0;
+	while (*s) {
+		l += fontkern[fontframe[gbFontTransTbl[*s++]]] + 1;
+	}
+	return l;
+}
+
+#define GG_SWAP(A, B) \
+	{                 \
+		(A) ^= (B);   \
+		(B) ^= (A);   \
+		(A) ^= (B);   \
+	}
+#define GG_ABSOLUTE(I, J, K) (((I) - (J)) * ((K) = (((I) - (J)) < 0 ? -1 : 1)))
+
 /**
  * @brief Draw a line on the back buffer
  * @param x0 Back buffer coordinate
